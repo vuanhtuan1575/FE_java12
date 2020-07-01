@@ -1,0 +1,19 @@
+.gird-container {
+  display: grid;
+  grid-gap: 20px;
+  justify-content: space-around;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+ul.select,
+ul {
+  list-style-type: none;
+  padding: 0px;
+}
+ul.select li::before {
+  color: white;
+  content: "\f101 \00a0"; /* replace / with \ */
+  font-family: "Font Awesome 5 Free"; /* here is the correct font-family */
+  font-style: normal;
+  font-weight: 900;
+  text-decoration: inherit;
+}

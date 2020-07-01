@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "UTMAvo";
+  font-style: normal;
+  font-weight: normal;
+  src: local("UTMAvo"), local("UTMAvo"),
+    url("../fonts/utm-avo.woff") format("woff"); /* Modern Browsers */
+}
+
+@font-face {
+  font-family: "UTMAvoBold";
+  font-style: normal;
+  font-weight: normal;
+  src: local("UTMAvoBold"), url("../font/utm-avobold.woff") format("woff");
+}
+* {
+  font-family: UTMAvo, UTMAvoBold, "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: UTMAvoBold;
+}

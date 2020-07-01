@@ -1,0 +1,42 @@
+.gird-container {
+  display: grid;
+  grid-gap: 20px;
+  justify-content: space-around;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+img {
+  max-width: 100%;
+  margin: auto;
+}
+
+.image-show {
+  position: relative;
+}
+.sep {
+  height: 1px;
+  background: #ccc;
+  width: 100%;
+  margin: 15px 0 12px;
+}
+a {
+  color: #d6644a;
+}
+.gird-select {
+  display: grid;
+  grid-gap: 20px;
+  justify-content: space-around;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+.addtobag {
+  border: 0;
+  height: 40px;
+  line-height: 40px;
+  background: #d6644a;
+  padding: 0 15px;
+  font-size: 11px;
+  border-radius: 3px;
+  color: #fff;
+  margin: 8px 0 0;
+  width: 200px;
+  text-align: center;
+}

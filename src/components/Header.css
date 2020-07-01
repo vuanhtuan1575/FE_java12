@@ -1,0 +1,25 @@
+@media (min-width: 1024px) {
+  .navbar-nav li:hover > .dropdown-menu {
+    display: flex;
+    position: absolute;
+  }
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: -50%;
+  margin-top: -6px;
+  width: auto;
+}
+
+/* rotate caret on hover */
+.dropdown-menu > li > a:hover:after {
+  text-decoration: underline;
+  transform: rotate(-90deg);
+}
+.dropdown-menu ul {
+  width: 210px;
+}
