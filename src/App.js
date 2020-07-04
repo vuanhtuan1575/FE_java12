@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
-import Body from "./pages/Body";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import ProductDetailPage from "./pages/ProductDetailPage";
