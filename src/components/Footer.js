@@ -6,7 +6,7 @@ export default class Footer extends Component {
   render() {
     return (
       <div className="bg-dark">
-        <div className="container gird-container my-5 text-white">
+        <div className="container footer-gird-container my-5 text-white">
           <div className="my-3">
             <p className="h5">KHÁM PHÁ CỬA HÀNG</p>
             <ul className="select">
@@ -44,7 +44,7 @@ export default class Footer extends Component {
               </li>
               <li>
                 <Link to="/Path">
-                  <i className="fas fa-phone-square-alt"></i>{" "}
+                  <i className="fas fa-phone-square-alt"></i>
                   <span> 06779949</span>
                 </Link>
               </li>
