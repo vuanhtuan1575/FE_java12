@@ -49,7 +49,7 @@ ul.cat-list > li::before {
 }
 /* .wrap-search {
 } */
-h5::after {
+.wrap-search > h5::after {
   content: " "; /* replace / with \ */
   background: #ccc;
   height: 1px;
