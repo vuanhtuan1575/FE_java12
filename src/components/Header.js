@@ -40,9 +40,9 @@ export default class Header extends Component {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item active  mr-4">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="/">
                 TRANG CHỦ <span className="sr-only">(current)</span>
-              </a>
+              </Link>
             </li>
 
             <li className="nav-item dropdown  mr-4">
@@ -169,9 +169,9 @@ export default class Header extends Component {
               </a>
             </li>
             <li className="nav-item  mr-4">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="./dang-nhap">
                 ĐĂNG NHẬP
-              </a>
+              </Link>
             </li>
             <li className="nav-item mr-5 pr-5">
               <a className="nav-link" href="#">
