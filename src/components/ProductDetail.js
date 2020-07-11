@@ -42,6 +42,7 @@ export default class ProductDetail extends Component {
     size: "s",
     quanty: 1,
     active: "DESCRIPTION",
+    screenWidth: null,
   };
   changeView = (keyView) => {
     this.setState({ ...this.state, active: keyView });

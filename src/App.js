@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import Shop from "./pages/Shop";
 import Login from "./pages/Login";
+import AdminPage from "./pages/AdminPage";
+import AlertModel from "./components/AlertModel";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route exact path="/" component={Home}></Route>
           <Route exact path="/shop" component={Shop}></Route>
           <Route exact path="/dang-nhap" component={Login}></Route>
+          <Route exact path="/admin" component={AdminPage}></Route>
+          <Route exact path="/test" component={AlertModel}></Route>
         </Switch>
         <Footer />
       </Router>
