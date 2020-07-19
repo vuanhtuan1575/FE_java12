@@ -12,6 +12,7 @@ export default class ProductSmall extends Component {
           <img
             className="img-responsive"
             src="https://4menshop.com/cache/image/77/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790.png"
+            alt=""
           />
         </div>
         <div className="my-auto">

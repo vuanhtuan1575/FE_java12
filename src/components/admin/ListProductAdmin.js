@@ -2,23 +2,50 @@ import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { Editor } from "@tinymce/tinymce-react";
 import { UPLOAD_SIGNLE_URL } from "../../apis";
+import { toast } from "react-toastify";
+import Select from "react-select";
 import Resizer from "react-image-file-resizer";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  createProduct,
+  resetActionFunc,
+  findAllProductProcess,
+  deleteProductById,
+  findSignleProductByNameSeo,
+  updateProduct,
+} from "../../actions";
 import { dataURLtoFile, numberToVnd, xoa_dau, removeSpace } from "../../common";
-export default class ListProductAdmin extends Component {
+
+class ListProductAdmin extends Component {
   state = {
+    edit: false,
     modelShow: false,
     isImgExist: false,
     files: undefined,
     productDto: {
+      id: -1,
       name: "",
       nameSeo: "",
       oldPrice: undefined,
       nowPrice: undefined,
       description: "",
       jsonImg: undefined,
-      categoryId: undefined,
+      categoryNameSeo: undefined,
+      productStatus: null,
     },
+    selectOptionState: null,
+    selectOptionCategory: null,
+    optionProductStatus: [
+      { value: 0, label: "Thời trang hot" },
+      { value: 1, label: "Sản phẩm bán chạy" },
+      { value: 2, label: "Sản phẩm mới nhất" },
+      { value: 3, label: "Sản phẩm" },
+    ],
   };
+  componentDidMount() {
+    this.props.findAllProductProcess();
+  }
 
   /**
    * Handle TinyBCE Editor to state
@@ -68,6 +95,40 @@ export default class ListProductAdmin extends Component {
     });
   };
 
+  notifySucess = () => {
+    let str;
+    if (this.state.edit) str = "Cập nhật thành công";
+    else str = "Thêm nhật thành công";
+    return toast.success(`${str} `, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  };
+  notifyError = () => {
+    return toast.danger("Kiểm tra thông tin nhập", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.selectOptionCategory && this.state.selectOptionState) {
+      if (this.state.files) {
+        this.handleUploadImage();
+
+        setTimeout(() => {
+          this.props.createProduct(this.state.productDto);
+        }, 1000);
+      } else if (this.state.edit) {
+        this.props.updateProduct(this.state.productDto);
+      }
+    } else alert("Vui lòng chọn Danh mục sản phẩm và Loại sản phẩm");
+  };
+  handleDeleteProduct = (id, index) => {
+    this.props.deleteProductById(id, index);
+  };
+
   /**
    * Handle Upload image and resize
    */
@@ -109,6 +170,63 @@ export default class ListProductAdmin extends Component {
     });
   };
 
+  handleChangeSelectState = (selectedOption) => {
+    this.setState({
+      ...this.state,
+      productDto: {
+        ...this.state.productDto,
+        productStatus: selectedOption.value,
+      },
+      selectOptionState: selectedOption,
+    });
+  };
+  handleChangeSelectCategory = (selectedOption) => {
+    this.setState({
+      ...this.state,
+      productDto: {
+        ...this.state.productDto,
+        categoryNameSeo: selectedOption.value,
+      },
+      selectOptionCategory: selectedOption,
+    });
+  };
+  handleEditProduct = (nameSeo) => {
+    this.props.findSignleProductByNameSeo(nameSeo);
+    setTimeout(() => {
+      if (this.props.product) {
+        const temtProduct = {
+          id: this.props.product.id,
+          name: this.props.product.name,
+          nameSeo: this.props.product.nameSeo,
+          oldPrice: this.props.product.oldPrice,
+          nowPrice: this.props.product.nowPrice,
+          description: this.props.product.description,
+          jsonImg: this.props.product.jsonImg,
+          categoryNameSeo: this.props.product.categoryNameSeo,
+          productStatus: this.props.product.productStatus,
+        };
+        this.props.resetActionFunc();
+        this.setState({
+          ...this.state,
+          edit: true,
+          productDto: temtProduct,
+          modelShow: !this.state.modelShow,
+        });
+        this.handleChangeSelectState(
+          this.state.optionProductStatus.find(
+            (item) => item.value === temtProduct.productStatus
+          )
+        );
+
+        this.handleChangeSelectCategory(
+          this.convertPropsToOptions(this.props.categorys).find(
+            (item) => item.value === temtProduct.categoryNameSeo
+          )
+        );
+      }
+    }, 100);
+  };
+
   /**
    * Model Add product
    * @param {*} props
@@ -123,27 +241,29 @@ export default class ListProductAdmin extends Component {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
+            Thêm sản phẩm
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="card">
             <div className="card-body" style={{ padding: "0px 24px" }}>
-              <form className="forms-sample">
+              <form className="forms-sample" onSubmit={this.handleSubmit}>
                 <div className="form-group">
-                  <label for="exampleFormControlFile1"></label>
                   <input
                     type="file"
                     name="files"
                     onChange={this.onFileChange}
                     multiple
                     className="form-control-file"
-                    id="exampleFormControlFile1"
+                    required
                   />
                 </div>
+              </form>
+              <form className="forms-sample" onSubmit={this.handleSubmit}>
                 <div className="form-group">
-                  <label for="exampleInputName1">Tên sản phẩm</label>
+                  <label>Tên sản phẩm</label>
                   <input
+                    required
                     type="text"
                     name="name"
                     value={this.state.productDto.name}
@@ -154,8 +274,9 @@ export default class ListProductAdmin extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputEmail3">Tên SEO</label>
+                  <label>Tên SEO</label>
                   <input
+                    required
                     name="nameSeo"
                     value={this.state.productDto.nameSeo}
                     onChange={this.handleChange}
@@ -165,11 +286,12 @@ export default class ListProductAdmin extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputPassword4">
+                  <label>
                     Giá chưa giảm |{" "}
                     {numberToVnd(this.state.productDto.oldPrice)}
                   </label>
                   <input
+                    required
                     value={this.state.productDto.oldPrice}
                     name="oldPrice"
                     onChange={this.handleChange}
@@ -179,11 +301,12 @@ export default class ListProductAdmin extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputPassword4">
+                  <label>
                     Giá bán hiện tại |{" "}
                     {numberToVnd(this.state.productDto.nowPrice)}
                   </label>
                   <input
+                    required
                     value={this.state.productDto.nowPrice}
                     name="nowPrice"
                     onChange={this.handleChange}
@@ -192,27 +315,56 @@ export default class ListProductAdmin extends Component {
                     placeholder="VD: 40000"
                   />
                 </div>
-
-                <div className="form-group form-control-sm">
-                  <label for="exampleSelectGender"></label>
-                  <select className="form-control" id="exampleSelectGender">
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
+                <div className="form-group">
+                  <label for="exampleInputPassword4">Danh mục sản phẩm</label>
+                  <Select
+                    styles={{
+                      // Fixes the overlapping problem of the component
+                      menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                    }}
+                    isSearchable
+                    value={this.state.selectOptionCategory}
+                    onChange={this.handleChangeSelectCategory}
+                    options={this.convertPropsToOptions(this.props.categorys)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label for="exampleInputPassword4">
+                    Chọn Danh mục sản phẩm
+                  </label>
+                  <Select
+                    styles={{
+                      // Fixes the overlapping problem of the component
+                      menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                    }}
+                    isSearchable
+                    value={this.state.selectOptionState}
+                    onChange={this.handleChangeSelectState}
+                    options={this.state.optionProductStatus}
+                  />
                 </div>
 
-                <div className="form-group my-5">
+                <div className="form-group">
+                  <label for="exampleInputPassword4">Mô tả sản phẩm</label>
                   <Editor
                     apiKey="lpuxq0wvsxku3pc90arsw3yp7yr7idacs679co1qp2oo45yy"
-                    plugins="wordcount link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount"
+                    plugins="wordcount link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help"
                     onEditorChange={this.handleEditorChange}
+                    value={this.state.productDto.description}
                   />
                 </div>
                 <button type="submit" className="btn btn-primary mr-2">
-                  Submit
+                  {this.state.edit === true ? "Cập nhật" : "Thêm sản phẩm"}
                 </button>
-                <button className="btn btn-light">Cancel</button>
               </form>
+              <div className="form-group mt-4">
+                {this.state.modelShow &&
+                  this.props.statusAction === 200 &&
+                  this.notifySucess()}
+                {this.state.modelShow &&
+                  this.props.statusAction === 500 &&
+                  this.notifyError()}
+              </div>
             </div>
           </div>
         </Modal.Body>
@@ -224,11 +376,32 @@ export default class ListProductAdmin extends Component {
   };
 
   handleShowModel = () => {
-    this.setState({ ...this.state, modelShow: !this.state.modelShow });
+    this.props.resetActionFunc();
+    if (this.state.modelShow === true) this.props.findAllProductProcess();
+    this.setState({
+      ...this.state,
+      modelShow: !this.state.modelShow,
+      edit: false,
+    });
+  };
+
+  convertPropsToOptions = (array) => {
+    let options = [];
+    let temp;
+
+    array.map((item, index) => {
+      if (item.onMenu === false) {
+        temp = { value: item.nameSeo, label: item.name };
+        options.push(temp);
+      }
+      return console.log();
+    });
+    return options;
   };
 
   render() {
     console.log(this.state);
+
     return (
       <>
         <this.modelAddProduct
@@ -255,17 +428,41 @@ export default class ListProductAdmin extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Jacob</td>
-                  <td>Photoshop</td>
-                  <td>Photoshop</td>
-                  <td className="text-danger">
-                    28.76% <i className="mdi mdi-arrow-down"></i>
-                  </td>
-                  <td>
-                    <label className="badge badge-danger">Pending</label>
-                  </td>
-                </tr>
+                {this.props.products &&
+                  this.props.products.map((item, index) => (
+                    <tr>
+                      <td>{item.name}</td>
+                      <td>{item.nowPrice}</td>
+                      <td>{item.oldPrice}</td>
+                      <td className="text-danger">
+                        <label className="badge badge-danger mr-1">
+                          {item.isActive === true ? (
+                            <span>Kích Hoạt</span>
+                          ) : (
+                            <span>Không kích hoạt</span>
+                          )}
+                        </label>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-danger my-auto mr-1"
+                          onClick={() =>
+                            this.handleDeleteProduct(item.id, index)
+                          }
+                        >
+                          Delete
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger my-auto"
+                          onClick={() => this.handleEditProduct(item.nameSeo)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -274,3 +471,30 @@ export default class ListProductAdmin extends Component {
     );
   }
 }
+ListProductAdmin.defaultProps = {
+  categorys: [],
+  statusAction: -1,
+  products: [],
+  product: undefined,
+};
+
+const mapStateToProps = (state) => ({
+  statusAction: state.statusAction,
+  products: state.products,
+  product: state.product,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      createProduct,
+      resetActionFunc,
+      findAllProductProcess,
+      deleteProductById,
+      findSignleProductByNameSeo,
+      updateProduct,
+    },
+    dispatch
+  ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ListProductAdmin);

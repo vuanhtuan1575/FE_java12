@@ -94,21 +94,12 @@ export default class Slick extends Component {
     };
     return (
       <Slider {...settings}>
-        <div className="px-2">
-          <ProductItem />
-        </div>
-        <div className="px-2">
-          <ProductItem />
-        </div>
-        <div className="px-2">
-          <ProductItem />
-        </div>
-        <div className="px-2">
-          <ProductItem />
-        </div>
-        <div className="px-2">
-          <ProductItem />
-        </div>
+        {this.props.products &&
+          this.props.products.map((item, index) => (
+            <div className="px-2">
+              <ProductItem product={item} key={index} />
+            </div>
+          ))}
       </Slider>
     );
   }

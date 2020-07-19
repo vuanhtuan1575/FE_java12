@@ -1,3 +1,19 @@
+import provinJson from "./files/provin.json";
+import districJson from "./files/distric.json";
+
+export const getProvin = () => {
+  const provin = JSON.parse(JSON.stringify(provinJson));
+  return provin;
+};
+export const getDistricByParentCode = (parentCode) => {
+  const distric = JSON.parse(JSON.stringify(districJson));
+  let districNew = [];
+  for (let i = 0; i < distric.length; i++) {
+    if (distric[i].parent_code === parentCode) districNew.push(distric[i]);
+  }
+  return districNew;
+};
+
 export const setCookie = (cname, cvalue, hours) => {
   var d = new Date();
   d.setTime(d.getTime() + hours * 60 * 60 * 1000);
@@ -10,10 +26,10 @@ export const getCookie = (cname) => {
   var ca = decodedCookie.split(";");
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0) == " ") {
+    while (c.charAt(0) === " ") {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }
@@ -21,7 +37,7 @@ export const getCookie = (cname) => {
 };
 export const checkCookie = (cname) => {
   var cookie = getCookie(cname);
-  if (cookie != "") {
+  if (cookie !== "") {
     return true;
   } else {
     return false;

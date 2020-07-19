@@ -40,20 +40,25 @@ class Login extends Component {
                   >
                     Incorrect username or password.
                   </div>
-                ) : (
-                  this.props.statusLogin === 400 && (
-                    <div
-                      className="alert alert-danger alert-dismissible fade show"
-                      role="alert"
-                    >
-                      Tài khoản và mật khẩu không hợp lệ
-                    </div>
-                  )
-                )}
+                ) : this.props.statusLogin === 400 ? (
+                  <div
+                    className="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                  >
+                    Tài khoản và mật khẩu không hợp lệ
+                  </div>
+                ) : this.props.statusLogin === 599 ? (
+                  <div
+                    className="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                  >
+                    Mất kết nối tới máy chủ
+                  </div>
+                ) : null}
                 <form onSubmit={this.handleSubmit}>
                   {/* <!-- to error: add className "has-danger" --> */}
                   <div className="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
+                    <label>Email address</label>
                     <input
                       type="text"
                       className="form-control form-control-sm"
@@ -64,7 +69,7 @@ class Login extends Component {
                   </div>
                   <div className="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <a href="#" style={{ float: "right", fontSize: "12px" }}>
+                    <a href="/#" style={{ float: "right", fontSize: "12px" }}>
                       Forgot password?
                     </a>
                     <input
@@ -77,7 +82,7 @@ class Login extends Component {
                   <button className="btn btn-primary btn-block">Sign in</button>
 
                   <div className="sign-up">
-                    Don't have an account? <a href="#">Create One</a>
+                    Don't have an account? <a href="/#">Create One</a>
                   </div>
                 </form>
               </div>

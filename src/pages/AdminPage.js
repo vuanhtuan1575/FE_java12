@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Redirect, withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { logOut, findAllCategoryFunc } from "../actions";
 import ListProductAdmin from "../components/admin/ListProductAdmin";
 import ListCategoryAdmin from "../components/admin/ListCategoryAdmin";
 import ListPostsAdmin from "../components/admin/ListPostsAdmin";
-import { checkCookie, setCookie } from "../common";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { checkCookie } from "../common";
 import { Modal, Button } from "react-bootstrap";
 class AdminPage extends Component {
   state = {
@@ -11,11 +14,15 @@ class AdminPage extends Component {
     redirect: false,
   };
   handleLogout = () => {
-    setCookie("token", "", 0);
+    this.props.logOut();
     this.setState({ ...this.state, redirect: true });
   };
+  componentDidMount() {
+    this.props.findAllCategoryFunc();
+  }
 
   handleView = (view) => {
+    // if (view === "VIEWCATEGORY") this.props.findAllCategoryFunc();
     this.setState({ ...this.state, contentWrapper: view });
   };
   handleClose = (isRedirect) => {
@@ -91,7 +98,7 @@ class AdminPage extends Component {
                   <a
                     className="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
                     id="messageDropdown"
-                    href="#"
+                    href="/#"
                     data-toggle="dropdown"
                   >
                     <i className="mdi mdi-message-text mx-0"></i>
@@ -104,11 +111,11 @@ class AdminPage extends Component {
                     <p className="mb-0 font-weight-normal float-left dropdown-header">
                       Messages
                     </p>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <img
                           src="images/faces/face4.jpg"
-                          alt="image"
+                          alt="an"
                           className="profile-pic"
                         />
                       </div>
@@ -121,11 +128,11 @@ class AdminPage extends Component {
                         </p>
                       </div>
                     </a>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <img
                           src="images/faces/face2.jpg"
-                          alt="image"
+                          alt="imge"
                           className="profile-pic"
                         />
                       </div>
@@ -138,11 +145,11 @@ class AdminPage extends Component {
                         </p>
                       </div>
                     </a>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <img
                           src="images/faces/face3.jpg"
-                          alt="image"
+                          alt=""
                           className="profile-pic"
                         />
                       </div>
@@ -162,7 +169,7 @@ class AdminPage extends Component {
                   <a
                     className="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown"
                     id="notificationDropdown"
-                    href="#"
+                    href="/#"
                     data-toggle="dropdown"
                   >
                     <i className="mdi mdi-bell mx-0"></i>
@@ -175,7 +182,7 @@ class AdminPage extends Component {
                     <p className="mb-0 font-weight-normal float-left dropdown-header">
                       Notifications
                     </p>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <div className="item-icon bg-success">
                           <i className="mdi mdi-information mx-0"></i>
@@ -190,7 +197,7 @@ class AdminPage extends Component {
                         </p>
                       </div>
                     </a>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <div className="item-icon bg-warning">
                           <i className="mdi mdi-settings mx-0"></i>
@@ -203,7 +210,7 @@ class AdminPage extends Component {
                         </p>
                       </div>
                     </a>
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <div className="item-icon bg-info">
                           <i className="mdi mdi-account-box mx-0"></i>
@@ -223,7 +230,7 @@ class AdminPage extends Component {
                 <li className="nav-item nav-profile dropdown">
                   <a
                     className="nav-link dropdown-toggle"
-                    href="#"
+                    href="/#"
                     data-toggle="dropdown"
                     id="profileDropdown"
                   >
@@ -234,11 +241,15 @@ class AdminPage extends Component {
                     className="dropdown-menu dropdown-menu-right navbar-dropdown"
                     aria-labelledby="profileDropdown"
                   >
-                    <a className="dropdown-item">
+                    <a className="dropdown-item" href="/#">
                       <i className="mdi mdi-settings text-primary"></i>
                       Settings
                     </a>
-                    <a className="dropdown-item" onClick={this.handleLogout}>
+                    <a
+                      className="dropdown-item"
+                      onClick={this.handleLogout}
+                      href="/#"
+                    >
                       <i className="mdi mdi-logout text-primary"></i>
                       Logout
                     </a>
@@ -265,46 +276,12 @@ class AdminPage extends Component {
                     <span className="menu-title">Dashboard</span>
                   </a>
                 </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    data-toggle="collapse"
-                    href="#ui-basic"
-                    aria-expanded="false"
-                    aria-controls="ui-basic"
-                  >
-                    <i className="mdi mdi-circle-outline menu-icon"></i>
-                    <span className="menu-title">UI Elements</span>
-                    <i className="menu-arrow"></i>
-                  </a>
-                  <div className="collapse" id="ui-basic">
-                    <ul className="nav flex-column sub-menu">
-                      <li className="nav-item">
-                        {" "}
-                        <a
-                          className="nav-link"
-                          href="pages/ui-features/buttons.html"
-                        >
-                          Buttons
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        {" "}
-                        <a
-                          className="nav-link"
-                          href="pages/ui-features/typography.html"
-                        >
-                          Typography
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
+
                 <li
                   className="nav-item"
                   onClick={() => this.handleView("VIEWPRODUCT")}
                 >
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="#Thang">
                     <i className="mdi mdi-view-headline menu-icon"></i>
                     <span className="menu-title">Danh sách sản phẩm</span>
                   </a>
@@ -313,7 +290,7 @@ class AdminPage extends Component {
                   className="nav-item"
                   onClick={() => this.handleView("VIEWCATEGORY")}
                 >
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="#sg">
                     <i className="mdi mdi-chart-pie menu-icon"></i>
                     <span className="menu-title">Danh sách loại sản phẩm</span>
                   </a>
@@ -322,7 +299,7 @@ class AdminPage extends Component {
                   className="nav-item"
                   onClick={() => this.handleView("VIEWPOSTS")}
                 >
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="!#">
                     <i className="mdi mdi-grid-large menu-icon"></i>
                     <span className="menu-title">DANH SÁCH BÀI VIẾT</span>
                   </a>
@@ -333,10 +310,10 @@ class AdminPage extends Component {
             <div className="main-panel">
               <div className="content-wrapper">
                 {this.state.contentWrapper === "VIEWPRODUCT" && (
-                  <ListProductAdmin />
+                  <ListProductAdmin categorys={this.props.categorys} />
                 )}
                 {this.state.contentWrapper === "VIEWCATEGORY" && (
-                  <ListCategoryAdmin />
+                  <ListCategoryAdmin categorys={this.props.categorys} />
                 )}
                 {this.state.contentWrapper === "VIEWPOSTS" && (
                   <ListPostsAdmin />
@@ -347,8 +324,12 @@ class AdminPage extends Component {
               <footer className="footer">
                 <div className="d-sm-flex justify-content-center justify-content-sm-between">
                   <span className="text-muted text-center text-sm-left d-block d-sm-inline-block">
-                    Copyright © 2018{" "}
-                    <a href="https://www.bootstrapdash.com/" target="_blank">
+                    Copyright © 2018
+                    <a
+                      href="https://www.bootstrapdash.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Bootstrapdash
                     </a>
                     . All rights reserved.
@@ -368,4 +349,19 @@ class AdminPage extends Component {
       );
   }
 }
-export default AdminPage;
+AdminPage.defaultProps = { categorys: [] };
+
+const mapStateToProps = (state) => ({
+  categorys: state.categorys,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      logOut,
+      findAllCategoryFunc,
+    },
+    dispatch
+  ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPage);

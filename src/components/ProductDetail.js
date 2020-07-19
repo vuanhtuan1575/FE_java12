@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import Slider from "react-slick";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./ProductDetail.css";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { findSignleProductByNameSeo, addToCartFunc } from "../actions";
+import ReactHtmlParser from "react-html-parser";
+import { numberToVnd } from "../common";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -20,7 +28,7 @@ function SampleNextArrow(props) {
     />
   );
 }
-
+toast.configure();
 function SamplePrevArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -37,13 +45,48 @@ function SamplePrevArrow(props) {
     />
   );
 }
-export default class ProductDetail extends Component {
+class ProductDetail extends Component {
   state = {
-    size: "s",
-    quanty: 1,
+    buyPackage: {
+      size: "s",
+      quanty: 1,
+    },
+
     active: "DESCRIPTION",
     screenWidth: null,
+    indexImg: 0,
   };
+  componentDidMount() {
+    const queryString = require("query-string");
+
+    const parsed = queryString.parse(window.location.search);
+    if (parsed.sp) {
+      this.props.findSignleProductByNameSeo(parsed.sp);
+      window.scrollTo(0, 0);
+    } else this.props.findSignleProductByNameSeo(this.props.productNameSeo);
+  }
+  customToast = (product) => {
+    return (
+      <div>
+        {product && (
+          <img
+            className="rounded img-fluid"
+            style={{ width: "36px", height: "36px" }}
+            src={product.jsonImg[0]}
+            alt={product.name}
+          />
+        )}
+        Đã thêm vào giỏ hàng <i className="fas fa-check"> </i>
+      </div>
+    );
+  };
+
+  notify = (product) =>
+    toast(this.customToast(product), {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+
   changeView = (keyView) => {
     this.setState({ ...this.state, active: keyView });
   };
@@ -51,21 +94,28 @@ export default class ProductDetail extends Component {
     const value = evt.target.value;
     this.setState({
       ...this.state,
-      [evt.target.name]: value,
+      buyPackage: { ...this.state.buyPackage, [evt.target.name]: value },
     });
+  };
+
+  popupAddToCart = (product) => {
+    this.props.addToCartFunc(product, this.state.buyPackage);
+    this.notify(product);
   };
 
   handleSubmit = (event) => {
     alert("Your favorite flavor is: " + this.state.size);
     event.preventDefault();
   };
+
   render() {
     var settings = {
       dots: true,
-      infinite: false,
+      infinite: true,
       speed: 500,
       slidesToShow: 4,
       slidesToScroll: 4,
+
       initialSlide: 0,
       nextArrow: <SampleNextArrow />,
       prevArrow: <SamplePrevArrow />,
@@ -81,69 +131,47 @@ export default class ProductDetail extends Component {
         },
       ],
     };
+    const { product } = this.props;
+    console.log(this.state);
     return (
       <div className="container">
         <div className="gird-container my-5">
           <div className="image-show">
             <div className="owl-item mb-3">
               <img
-                src="https://4menshop.com/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790-slide-products-5cedf4770a028.png"
+                src={product && product.jsonImg[this.state.indexImg]}
                 alt="Áo Sơ Mi Trắng ASM1266"
                 className="img-responsive"
               />
             </div>
 
             <Slider {...settings}>
-              <div className="px-1">
-                <img
-                  src="https://4menshop.com/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790-slide-products-5cedf4770a028.png"
-                  alt="Áo Sơ Mi Trắng ASM1266"
-                  className="img-responsive"
-                />
-              </div>
-              <div className="px-1">
-                <img
-                  src="https://4menshop.com/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790-slide-products-5cedf4770a028.png"
-                  alt="Áo Sơ Mi Trắng ASM1266"
-                  className="img-responsive"
-                />
-              </div>
-              <div className="px-1">
-                <img
-                  src="https://4menshop.com/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790-slide-products-5cedf4770a028.png"
-                  alt="Áo Sơ Mi Trắng ASM1266"
-                  className="img-responsive"
-                />
-              </div>
-              <div className="px-1">
-                <img
-                  src="https://4menshop.com/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790-slide-products-5cedf4770a028.png"
-                  alt="Áo Sơ Mi Trắng ASM1266"
-                  className="img-responsive"
-                />
-              </div>
+              {product &&
+                product.jsonImg.map((item, index) => (
+                  <div className="px-1">
+                    <img
+                      src={item}
+                      alt="Áo Sơ Mi Trắng ASM1266"
+                      className="img-responsive"
+                      onClick={() =>
+                        this.setState({ ...this.state, indexImg: index })
+                      }
+                    />
+                  </div>
+                ))}
             </Slider>
           </div>
           <div className="product-single">
             <div className="ps-header">
-              <h1>ÁO SƠ MI TRẮNG ASM1266</h1>
-              <div className="rating-star">
-                <div className="ratings">
-                  <span className="act fa fa-star" aria-hidden="true"></span>
-                  <span className="act fa fa-star" aria-hidden="true"></span>
-                  <span className="act fa fa-star" aria-hidden="true"></span>
-                  <span className="act fa fa-star" aria-hidden="true"></span>
-                  <span className="act fa fa-star" aria-hidden="true"></span>
-                </div>
-              </div>
+              <h1>{product && product.name}</h1>
+
               <div className="ps-price product-attr">
-                <span>Giá bán: </span>
-                <span className="product-price">
-                  220.500
-                  <em>
-                    Giá gốc: <span>245.000</span>
-                  </em>
-                </span>
+                <span className="product-price" style={{ color: "#d6644a" }}>
+                  {product && numberToVnd(product.nowPrice)}
+                </span>{" "}
+                <em className="ml-3" style={{ textDecoration: "line-through" }}>
+                  <span> {product && numberToVnd(product.oldPrice)}</span>
+                </em>
               </div>
             </div>
             <div className="ps-stock product-attr">
@@ -151,23 +179,22 @@ export default class ProductDetail extends Component {
             </div>
             <div className="sep"></div>
             <p>
-              <span>Trọng lượng S/P:</span> 400 Gram
-            </p>
-            <p>
               <span>Danh mục: </span>
-              <a
-                href="https://4menshop.com/ao-so-mi-han-quoc.html"
-                title="Áo Sơ Mi Hàn Quốc"
+              <Link
+                style={{ color: "#d6644a" }}
+                to={`/quan-ao?shop=${product && product.categoryNameSeo}`}
+                title={product && product.categoryName}
               >
-                Áo Sơ Mi Hàn Quốc
-              </a>
+                {product && product.categoryName}
+              </Link>
             </p>
+            {product && (
+              <>
+                <span>Điểm nổi bật:</span>
+                <div> {ReactHtmlParser(product.description)}</div>
+              </>
+            )}
 
-            <span>Điểm nổi bật:</span>
-            <p>
-              Áo sơ mi trắng với thiết kế đơn giản, trẻ trung tôn lên vẻ thanh
-              lịch, trưởng thành của phái mạnh.
-            </p>
             <div className="gird-select">
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
@@ -224,14 +251,20 @@ export default class ProductDetail extends Component {
               type="button"
               id="buyNow"
               rel="10790"
-              className="addtobag mr-5"
+              className="addtobag mr-2"
               onClick={this.handleSubmit}
+              style={{ width: "150px" }}
             >
-              <i className="fa fa-shopping-cart"></i> Đăng ký mua
+              <i className="fa fa-shopping-cart"></i> Mua hàng
             </button>
-            <a id="addToCart" rel="nofollow" product="10790">
-              + Thêm vào giỏ hàng
-            </a>
+            <button
+              type="button"
+              onClick={() => this.popupAddToCart(product)}
+              className="btn addtobag my-auto"
+              style={{ width: "150px" }}
+            >
+              + Thêm vào giỏ
+            </button>
           </div>
         </div>
         <div>
@@ -261,7 +294,7 @@ export default class ProductDetail extends Component {
               </span>
             </li>
             <li className="nav-item">
-              <a className="nav-link disabled" href="#">
+              <a className="nav-link disabled" href="/#">
                 ĐÁNH GIÁ
               </a>
             </li>
@@ -270,10 +303,7 @@ export default class ProductDetail extends Component {
           <div className="">
             {this.state.active === "DESCRIPTION" ? (
               <div className="  ">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
+                <p>{product && ReactHtmlParser(product.description)}</p>
               </div>
             ) : (
               <div className="">
@@ -289,3 +319,24 @@ export default class ProductDetail extends Component {
     );
   }
 }
+ProductDetail.defaultProps = {
+  statusAction: -1,
+  product: undefined,
+};
+//tao component ProductCard, dua component vao list
+
+const mapStateToProps = (state) => ({
+  statusAction: state.statusAction,
+  product: state.product,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      findSignleProductByNameSeo,
+      addToCartFunc,
+    },
+    dispatch
+  ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

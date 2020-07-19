@@ -4,3 +4,57 @@ border {
 .product-responsive {
   width: 100%;
 }
+.Product-signle-parent {
+  position: relative;
+}
+
+.Product-signle-child {
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  width: 30px;
+  position: absolute;
+  top: 0%;
+  right: 1%;
+  display: block;
+  background-color: white;
+  border-radius: 35px;
+}
+.Product-signle-child > div {
+  text-align: center;
+}
+.fa-2x {
+  font-size: 1em;
+}
+.card-text > p {
+  margin-bottom: 0.25rem !important;
+}
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (min-width: 768px) {
+  .Product-signle-child {
+    display: flex;
+    flex-direction: column;
+    height: 85px;
+    width: 50px;
+    position: absolute;
+    top: 0%;
+    right: 1%;
+    visibility: hidden;
+    opacity: 0;
+    background-color: white;
+    transition: visibility 0s, opacity 1s linear;
+  }
+  .card-text > p {
+    margin-bottom: 1rem !important;
+  }
+  .fa-2x {
+    font-size: 1.5em;
+  }
+  .Product-signle-child > div {
+    margin: 10px 0px;
+  }
+  .Product-signle-parent:hover > .Product-signle-child {
+    visibility: visible;
+    opacity: 1;
+  }
+}

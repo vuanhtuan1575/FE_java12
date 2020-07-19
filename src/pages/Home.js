@@ -3,8 +3,16 @@ import Carousel from "../components/Carousel";
 import ListProduct from "../components/ListProduct";
 import ShowCategory from "../components/ShowCategory";
 import Slick from "../components/Slick";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { findAllProductProcess, findByProductByState } from "../actions";
 
-export default class Home extends Component {
+class Home extends Component {
+  componentDidMount() {
+    this.props.findByProductByState(0); // san pham hot
+    this.props.findByProductByState(1); // san pham mua nhieu
+    this.props.findByProductByState(2); // san pham moi
+  }
   render() {
     return (
       <div>
@@ -18,7 +26,7 @@ export default class Home extends Component {
             thời trang tại shop 4MEN
           </p>
         </div>
-        <ListProduct />
+        <ListProduct products={this.props.hotProducts} />
         <ShowCategory />
         <div style={{ textAlign: "center" }} className="my-5">
           <h5>
@@ -29,7 +37,7 @@ export default class Home extends Component {
             sưu tập thời trang 4MEN
           </p>
         </div>
-        <ListProduct />
+        <ListProduct products={this.props.newProducts} />
 
         <div style={{ textAlign: "center" }} className="my-5">
           <h5>
@@ -40,8 +48,35 @@ export default class Home extends Component {
             sưu tập thời trang 4MEN
           </p>
         </div>
-        <Slick />
+        <Slick products={this.props.buyMoreProducts} />
       </div>
     );
   }
 }
+Home.defaultProps = {
+  statusAction: -1,
+  hotProducts: [],
+  buyMoreProducts: [],
+
+  newProducts: [],
+};
+//tao component ProductCard, dua component vao list
+
+const mapStateToProps = (state) => ({
+  statusAction: state.statusAction,
+  hotProducts: state.hotProducts,
+  buyMoreProducts: state.buyMoreProducts,
+
+  newProducts: state.newProducts,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      findAllProductProcess,
+      findByProductByState,
+    },
+    dispatch
+  ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

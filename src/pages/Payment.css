@@ -1,0 +1,9 @@
+.payment-totalprice-container {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+td {
+  text-align: center;
+  vertical-align: middle;
+}

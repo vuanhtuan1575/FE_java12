@@ -2,8 +2,24 @@ import React, { Component } from "react";
 import ListProduct from "../components/ListProduct";
 import "./Shop.css";
 import ProductSmall from "../components/ProductSmall";
-export default class Shop extends Component {
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  findProductsByCategoryNameSeo,
+  findAllProductContainName,
+} from "../actions";
+class Shop extends Component {
+  componentDidMount() {
+    const queryString = require("query-string");
+    const parsed = queryString.parse(window.location.search);
+
+    if (parsed.shop) this.props.findProductsByCategoryNameSeo(parsed.shop);
+    else if (parsed.sName) this.props.findAllProductContainName(parsed.sName);
+    window.scrollTo(0, 0);
+  }
+
   render() {
+    const { products } = this.props;
     return (
       <div className="container">
         <div className="row">
@@ -113,7 +129,7 @@ export default class Shop extends Component {
                 </div>
               </div>
             </div>
-            <ListProduct />
+            <ListProduct products={products} />
           </div>
           <div className="col-12 col-md-4 mt-4">
             <div className="wrap-search">
@@ -121,7 +137,6 @@ export default class Shop extends Component {
                 <span>TÌM KIẾM</span>
               </h5>
               <form
-                role="form"
                 className="search-widget"
                 action="https://4menshop.com/tim-kiem.html"
                 method="post"
@@ -160,3 +175,22 @@ export default class Shop extends Component {
     );
   }
 }
+Shop.defaultProps = {
+  products: [],
+  statusAction: -1,
+};
+const mapStateToProps = (state) => ({
+  statusAction: state.statusAction,
+  products: state.products,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators(
+    {
+      findProductsByCategoryNameSeo,
+      findAllProductContainName,
+    },
+    dispatch
+  ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Shop);
