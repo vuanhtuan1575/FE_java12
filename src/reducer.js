@@ -17,6 +17,7 @@ import {
   REMOVE_TO_CART,
   FIND_SIGNLE_CATEGORY,
   FIND_ALL_PRODUCT_CONTAIN_NAME,
+  FIND_ALL_PRODUCT_AND_CATEGORY,
 } from "./actions";
 const initialState = {
   statusLogin: -1,
@@ -53,26 +54,31 @@ const reducer = (state = initialState, action) => {
     case FIND_CATEGORY:
       return {
         ...state,
-        statusAction: action.statusAction,
         categorys: action.listCategory,
       };
     case FIND_ALL_PRODUCT:
       return {
         ...state,
-        statusAction: action.statusAction,
+
         products: action.listProduct,
       };
     case FIND_SIGNLE_PRODUCT_BY_NAMESEO:
       return {
         ...state,
-        statusAction: action.statusAction,
         product: action.product,
       };
     case FIND_ALL_PRODUCT_CONTAIN_NAME:
       return {
         ...state,
         statusAction: action.statusAction,
-        products: action.products,
+        products: action.CateAndPro.resProductDto,
+        category: action.CateAndPro.resCategoryDto,
+      };
+    case FIND_ALL_PRODUCT_AND_CATEGORY:
+      return {
+        ...state,
+        products: action.cateAndPro.resProductDto,
+        category: action.cateAndPro.resCategoryDto,
       };
     case FIND_SIGNLE_CATEGORY:
       return {
@@ -125,9 +131,14 @@ const reducer = (state = initialState, action) => {
       index = listCart.findIndex((item) => item.product.id === action.item.id);
       if (index !== -1) listCart.splice(index, 1);
 
+      listCart.map((item, index) => {
+        return (tempTotalPrice += item.product.nowPrice * item.quanty);
+      });
+
       return {
         ...state,
         carts: listCart,
+        totalPrice: tempTotalPrice,
       };
     case ADD_TO_CART:
       listCart = [...state.carts];

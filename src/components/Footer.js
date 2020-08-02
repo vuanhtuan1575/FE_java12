@@ -17,12 +17,10 @@ class Footer extends Component {
             <div className="my-3">
               <p className="h5">KHÁM PHÁ CỬA HÀNG</p>
               <ul className="select">
-                <li>Gì cũng có nè</li>
-                <li>Quần hoodie</li>
-                <li>Áo Siêu rộng</li>
-                <li>Thời trang abc</li>
-                <li>Thời trang abc</li>
-                <li>Thời trang abc</li>
+                <li>Updating</li>
+                <li>Updating</li>
+                <li>Updating</li>
+                <li>Updating</li>
               </ul>
             </div>
             <div className="my-3">
@@ -40,28 +38,25 @@ class Footer extends Component {
                 <li>
                   <Link to="/Path">
                     <i className="fab fa-facebook-f"></i>
-                    <span> FB:KiemMotIt.1977</span>
+                    <span> Updating</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/Path">
                     <i className="fas fa-envelope"></i>
-                    <span> kiemittien@email.com</span>
+                    <span> Updating@email.com</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/Path">
                     <i className="fas fa-phone-square-alt"></i>
-                    <span> 06779949</span>
+                    <span> Updating</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/Path">
                     <i className="fas fa-map-marker-alt"></i>
-                    <span>
-                      Đường nhà nghèo, phường làm giàu, Quận Phát triển, Thành
-                      Phố Huy Hoàng
-                    </span>
+                    <span>Updating</span>
                   </Link>
                 </li>
               </ul>

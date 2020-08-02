@@ -123,6 +123,9 @@ class ListProductAdmin extends Component {
       } else if (this.state.edit) {
         this.props.updateProduct(this.state.productDto);
       }
+      setTimeout(() => {
+        this.props.resetActionFunc();
+      }, 2500);
     } else alert("Vui lòng chọn Danh mục sản phẩm và Loại sản phẩm");
   };
   handleDeleteProduct = (id, index) => {
@@ -193,6 +196,7 @@ class ListProductAdmin extends Component {
   handleEditProduct = (nameSeo) => {
     this.props.findSignleProductByNameSeo(nameSeo);
     setTimeout(() => {
+      this.props.resetActionFunc();
       if (this.props.product) {
         const temtProduct = {
           id: this.props.product.id,
@@ -205,13 +209,7 @@ class ListProductAdmin extends Component {
           categoryNameSeo: this.props.product.categoryNameSeo,
           productStatus: this.props.product.productStatus,
         };
-        this.props.resetActionFunc();
-        this.setState({
-          ...this.state,
-          edit: true,
-          productDto: temtProduct,
-          modelShow: !this.state.modelShow,
-        });
+
         this.handleChangeSelectState(
           this.state.optionProductStatus.find(
             (item) => item.value === temtProduct.productStatus
@@ -223,8 +221,15 @@ class ListProductAdmin extends Component {
             (item) => item.value === temtProduct.categoryNameSeo
           )
         );
+
+        this.setState({
+          ...this.state,
+          edit: true,
+          productDto: temtProduct,
+          modelShow: !this.state.modelShow,
+        });
       }
-    }, 100);
+    }, 350);
   };
 
   /**
@@ -316,7 +321,7 @@ class ListProductAdmin extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputPassword4">Danh mục sản phẩm</label>
+                  <label>Danh mục sản phẩm</label>
                   <Select
                     styles={{
                       // Fixes the overlapping problem of the component
@@ -329,9 +334,7 @@ class ListProductAdmin extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label for="exampleInputPassword4">
-                    Chọn Danh mục sản phẩm
-                  </label>
+                  <label>Chọn Danh mục sản phẩm</label>
                   <Select
                     styles={{
                       // Fixes the overlapping problem of the component
@@ -345,7 +348,7 @@ class ListProductAdmin extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label for="exampleInputPassword4">Mô tả sản phẩm</label>
+                  <label>Mô tả sản phẩm</label>
                   <Editor
                     apiKey="lpuxq0wvsxku3pc90arsw3yp7yr7idacs679co1qp2oo45yy"
                     plugins="wordcount link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help"
@@ -357,7 +360,7 @@ class ListProductAdmin extends Component {
                   {this.state.edit === true ? "Cập nhật" : "Thêm sản phẩm"}
                 </button>
               </form>
-              <div className="form-group mt-4">
+              <div className="form-group mt-4" style={{ display: "none" }}>
                 {this.state.modelShow &&
                   this.props.statusAction === 200 &&
                   this.notifySucess()}
@@ -400,8 +403,6 @@ class ListProductAdmin extends Component {
   };
 
   render() {
-    console.log(this.state);
-
     return (
       <>
         <this.modelAddProduct

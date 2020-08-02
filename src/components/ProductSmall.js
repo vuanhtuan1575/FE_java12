@@ -1,24 +1,28 @@
 import React, { Component } from "react";
+import { numberToVnd } from "../common";
 const style = {
   parent: { display: "flex" },
-  productPrice: { fontSize: "16px", color: "#c80204" },
+  productPrice: { fontSize: "14px", color: "#c80204" },
 };
 
 export default class ProductSmall extends Component {
   render() {
+    const { product } = this.props;
     return (
-      <div style={style.parent} className="mb-2">
-        <div className="mr-3">
-          <img
-            className="img-responsive"
-            src="https://4menshop.com/cache/image/77/images/thumbs/2019/05/ao-so-mi-trang-asm1266-10790.png"
-            alt=""
-          />
+      <div style={style.parent} className="my-2">
+        <div className="col-4 col-md-4 mr-1">
+          <img className="img-responsive" st src={product.jsonImg[0]} alt="" />
         </div>
-        <div className="my-auto">
-          <p>SẢN PHẨM A</p>
+        <div className="col-8 col-md-8 my-auto">
+          <p style={{ fontSize: "10px" }}>{product && product.name}</p>
           <span style={style.productPrice}>
-            225.000 <em>245.000</em>
+            {numberToVnd(product.nowPrice)}
+            <span
+              className="ml-2"
+              style={{ textDecoration: "line-through", fontSize: "10px" }}
+            >
+              {numberToVnd(product.oldPrice)}
+            </span>
           </span>
         </div>
       </div>

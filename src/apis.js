@@ -1,4 +1,4 @@
-export const BASE_URL = "http://156.67.221.204:9090";
+export const BASE_URL = "http://webgiamgia.net:9090";
 
 export const LOGIN_URL = `${BASE_URL}/api/auth/signin`;
 export const UPLOAD_MULTIPLE_URL = `${BASE_URL}/uploadMultipleFiles`;

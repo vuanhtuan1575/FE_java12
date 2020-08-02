@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { logOut, findAllCategoryFunc } from "../actions";
 import ListProductAdmin from "../components/admin/ListProductAdmin";
 import ListCategoryAdmin from "../components/admin/ListCategoryAdmin";
@@ -12,6 +12,8 @@ class AdminPage extends Component {
   state = {
     contentWrapper: "DEFAULT",
     redirect: false,
+    activeMenu: false,
+    closeNav: false,
   };
   handleLogout = () => {
     this.props.logOut();
@@ -30,7 +32,6 @@ class AdminPage extends Component {
   };
   render() {
     let isCookieToken = !checkCookie("token");
-    console.log(this.state);
     if (this.state.redirect) {
       return <Redirect to="/dang-nhap" />;
     } else if (isCookieToken) {
@@ -59,16 +60,19 @@ class AdminPage extends Component {
           <nav className="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="navbar-brand-wrapper d-flex justify-content-center">
               <div className="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-                <a className="navbar-brand brand-logo" href="index.html">
+                <Link className="navbar-brand brand-logo" to="/">
                   (^_^)
-                </a>
-                <a className="navbar-brand brand-logo-mini" href="index.html">
-                  <img src="images/logo-mini.svg" alt="logo" />
-                </a>
+                </Link>
+
                 <button
                   className="navbar-toggler navbar-toggler align-self-center"
                   type="button"
-                  data-toggle="minimize"
+                  onClick={() =>
+                    this.setState({
+                      ...this.state,
+                      closeNav: !this.state.closeNav,
+                    })
+                  }
                 >
                   <span className="mdi mdi-sort-variant"></span>
                 </button>
@@ -86,7 +90,7 @@ class AdminPage extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Search now"
+                      placeholder="Please Updating"
                       aria-label="search"
                       aria-describedby="search"
                     />
@@ -109,9 +113,9 @@ class AdminPage extends Component {
                     aria-labelledby="messageDropdown"
                   >
                     <p className="mb-0 font-weight-normal float-left dropdown-header">
-                      Messages
+                      updating
                     </p>
-                    <a className="dropdown-item" href="/#">
+                    {/* <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <img
                           src="images/faces/face4.jpg"
@@ -127,42 +131,7 @@ class AdminPage extends Component {
                           The meeting is cancelled
                         </p>
                       </div>
-                    </a>
-                    <a className="dropdown-item" href="/#">
-                      <div className="item-thumbnail">
-                        <img
-                          src="images/faces/face2.jpg"
-                          alt="imge"
-                          className="profile-pic"
-                        />
-                      </div>
-                      <div className="item-content flex-grow">
-                        <h6 className="ellipsis font-weight-normal">
-                          Tim Cook
-                        </h6>
-                        <p className="font-weight-light small-text text-muted mb-0">
-                          New product launch
-                        </p>
-                      </div>
-                    </a>
-                    <a className="dropdown-item" href="/#">
-                      <div className="item-thumbnail">
-                        <img
-                          src="images/faces/face3.jpg"
-                          alt=""
-                          className="profile-pic"
-                        />
-                      </div>
-                      <div className="item-content flex-grow">
-                        <h6 className="ellipsis font-weight-normal">
-                          {" "}
-                          Johnson
-                        </h6>
-                        <p className="font-weight-light small-text text-muted mb-0">
-                          Upcoming board meeting
-                        </p>
-                      </div>
-                    </a>
+                    </a> */}
                   </div>
                 </li>
                 <li className="nav-item dropdown mr-4">
@@ -180,9 +149,9 @@ class AdminPage extends Component {
                     aria-labelledby="notificationDropdown"
                   >
                     <p className="mb-0 font-weight-normal float-left dropdown-header">
-                      Notifications
+                      Updating
                     </p>
-                    <a className="dropdown-item" href="/#">
+                    {/* <a className="dropdown-item" href="/#">
                       <div className="item-thumbnail">
                         <div className="item-icon bg-success">
                           <i className="mdi mdi-information mx-0"></i>
@@ -224,7 +193,7 @@ class AdminPage extends Component {
                           2 days ago
                         </p>
                       </div>
-                    </a>
+                    </a> */}
                   </div>
                 </li>
                 <li className="nav-item nav-profile dropdown">
@@ -234,17 +203,17 @@ class AdminPage extends Component {
                     data-toggle="dropdown"
                     id="profileDropdown"
                   >
-                    <img src="images/faces/face5.jpg" alt="profile" />
-                    <span className="nav-profile-name">Louis Barnett</span>
+                    <i className="far fa-user"></i>
+                    <span className="nav-profile-name">Admin</span>
                   </a>
                   <div
                     className="dropdown-menu dropdown-menu-right navbar-dropdown"
                     aria-labelledby="profileDropdown"
                   >
-                    <a className="dropdown-item" href="/#">
+                    {/* <a className="dropdown-item" href="/#">
                       <i className="mdi mdi-settings text-primary"></i>
                       Settings
-                    </a>
+                    </a> */}
                     <a
                       className="dropdown-item"
                       onClick={this.handleLogout}
@@ -259,7 +228,12 @@ class AdminPage extends Component {
               <button
                 className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
                 type="button"
-                data-toggle="offcanvas"
+                onClick={() =>
+                  this.setState({
+                    ...this.state,
+                    activeMenu: !this.state.activeMenu,
+                  })
+                }
               >
                 <span className="mdi mdi-menu"></span>
               </button>
@@ -268,41 +242,31 @@ class AdminPage extends Component {
           {/* <!-- partial --> */}
           <div className="container-fluid page-body-wrapper">
             {/* <!-- partial:partials/_sidebar.html --> */}
-            <nav className="sidebar sidebar-offcanvas" id="sidebar">
+            <nav
+              style={{ width: this.state.closeNav && "0px" }}
+              className={`sidebar sidebar-offcanvas ${
+                this.state.activeMenu && "active"
+              }`}
+              id="sidebar"
+            >
               <ul className="nav">
-                <li className="nav-item">
-                  <a className="nav-link" href="index.html">
-                    <i className="mdi mdi-home menu-icon"></i>
-                    <span className="menu-title">Dashboard</span>
-                  </a>
-                </li>
-
                 <li
                   className="nav-item"
                   onClick={() => this.handleView("VIEWPRODUCT")}
                 >
-                  <a className="nav-link" href="#Thang">
+                  <Link className="nav-link" to="#Thang">
                     <i className="mdi mdi-view-headline menu-icon"></i>
                     <span className="menu-title">Danh sách sản phẩm</span>
-                  </a>
+                  </Link>
                 </li>
                 <li
                   className="nav-item"
                   onClick={() => this.handleView("VIEWCATEGORY")}
                 >
-                  <a className="nav-link" href="#sg">
+                  <Link className="nav-link" to="#sg">
                     <i className="mdi mdi-chart-pie menu-icon"></i>
                     <span className="menu-title">Danh sách loại sản phẩm</span>
-                  </a>
-                </li>
-                <li
-                  className="nav-item"
-                  onClick={() => this.handleView("VIEWPOSTS")}
-                >
-                  <a className="nav-link" href="!#">
-                    <i className="mdi mdi-grid-large menu-icon"></i>
-                    <span className="menu-title">DANH SÁCH BÀI VIẾT</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>

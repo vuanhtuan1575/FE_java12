@@ -31,13 +31,13 @@ class Header extends Component {
         <span className="d-lg-none ml-auto mr-2">
           <Link
             to="#HelloWorld"
-            className="mr-1"
+            className="mr-3"
             onClick={() => alert("Chức năng tìm kiếm chưa sẵn sàng (~_~)")}
           >
             <i className="fas fa-search fa-1x" style={{ color: "#343a40" }}></i>
           </Link>
 
-          <Link to="/thanh-toan">
+          <Link to="/thanh-toan" className="mr-2">
             <i
               className="fas fa-shopping-bag fa-1x"
               style={{ color: "#343a40" }}

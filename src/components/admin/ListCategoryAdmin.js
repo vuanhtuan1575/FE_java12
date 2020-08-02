@@ -23,6 +23,7 @@ class ListCategoryAdmin extends Component {
       nameSeo: "",
       parentNameSeo: "",
       isActive: undefined,
+      description: "",
     },
     isCategoryParent: false,
     selectOptionCategory: null,
@@ -204,6 +205,19 @@ class ListCategoryAdmin extends Component {
                 </div>
                 {this.state.isCategoryParent && (
                   <div className="form-group">
+                    <label>Mô tả Category</label>
+                    <input
+                      name="description"
+                      value={this.state.categoryDto.description}
+                      onChange={this.handleChange}
+                      type="text"
+                      className="form-control"
+                      placeholder="VD: Quan-ong-loe"
+                    />
+                  </div>
+                )}
+                {this.state.isCategoryParent && (
+                  <div className="form-group">
                     <label for="">Category Cha</label>
                     <Select
                       styles={{
@@ -271,7 +285,6 @@ class ListCategoryAdmin extends Component {
     );
   };
   render() {
-    console.log(this.state);
     const categorys = Array.from(this.props.categorys);
 
     return (
@@ -339,7 +352,7 @@ class ListCategoryAdmin extends Component {
                         </label>
                         <label className="badge badge-danger">
                           <i
-                            class="fas fa-trash"
+                            className="fas fa-trash"
                             onClick={() =>
                               this.handleDeleteCategory(item.id, index)
                             }

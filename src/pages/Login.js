@@ -33,6 +33,7 @@ class Login extends Component {
             <div className="card-body">
               <h3 className="card-title text-center">Đăng Nhập</h3>
               <div className="card-text">
+                {"User & Password Demo :"} <br /> {"admin & admin123"}
                 {this.props.statusLogin === 401 ? (
                   <div
                     className="alert alert-danger alert-dismissible fade show"
@@ -58,17 +59,18 @@ class Login extends Component {
                 <form onSubmit={this.handleSubmit}>
                   {/* <!-- to error: add className "has-danger" --> */}
                   <div className="form-group">
-                    <label>Email address</label>
+                    <label>User</label>
                     <input
                       type="text"
                       className="form-control form-control-sm"
                       name="username"
                       aria-describedby="emailHelp"
                       onChange={this.handleChange}
+                      required
                     />
                   </div>
                   <div className="form-group">
-                    <label for="exampleInputPassword1">Password</label>
+                    <label>Password</label>
                     <a href="/#" style={{ float: "right", fontSize: "12px" }}>
                       Forgot password?
                     </a>
@@ -77,13 +79,16 @@ class Login extends Component {
                       className="form-control form-control-sm"
                       name="password"
                       onChange={this.handleChange}
+                      required
                     />
                   </div>
-                  <button className="btn btn-primary btn-block">Sign in</button>
+                  <button className="btn btn-primary btn-block">
+                    Đăng nhập
+                  </button>
 
-                  <div className="sign-up">
+                  {/* <div className="sign-up">
                     Don't have an account? <a href="/#">Create One</a>
-                  </div>
+                  </div> */}
                 </form>
               </div>
             </div>

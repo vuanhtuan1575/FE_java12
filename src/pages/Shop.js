@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
 import "./Shop.css";
 import ProductSmall from "../components/ProductSmall";
@@ -7,15 +8,32 @@ import { bindActionCreators } from "redux";
 import {
   findProductsByCategoryNameSeo,
   findAllProductContainName,
+  findByProductByState,
 } from "../actions";
 class Shop extends Component {
+  state = { location: undefined };
   componentDidMount() {
     const queryString = require("query-string");
     const parsed = queryString.parse(window.location.search);
+    console.log(parsed);
+    if (parsed.shop) {
+      this.props.findProductsByCategoryNameSeo(parsed.shop);
+    } else if (parsed.sName) this.props.findAllProductContainName(parsed.sName);
 
-    if (parsed.shop) this.props.findProductsByCategoryNameSeo(parsed.shop);
-    else if (parsed.sName) this.props.findAllProductContainName(parsed.sName);
+    this.props.findByProductByState(1); // san pham mua nhieu
     window.scrollTo(0, 0);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.location !== prevProps.location) {
+      const queryString = require("query-string");
+      const parsed = queryString.parse(window.location.search);
+      console.log(parsed);
+      if (parsed.shop) {
+        this.props.findProductsByCategoryNameSeo(parsed.shop);
+      } else if (parsed.sName)
+        this.props.findAllProductContainName(parsed.sName);
+      window.scrollTo(0, 0);
+    }
   }
 
   render() {
@@ -26,7 +44,9 @@ class Shop extends Component {
           <div className="col-12 col-md-8">
             <div className="filter-wrap my-3">
               <div className="row">
-                <h1 className="col-md-4 col-lg-5 col-sm-12">Áo Sơ Mi Nam</h1>
+                <h1 className="col-md-4 col-lg-5 col-sm-12">
+                  {this.props.category && this.props.category.name}
+                </h1>
                 <div className="col-md-8 col-lg-7 col-sm-12 filter-more">
                   <div className="row">
                     <div className="col-md-9 col-sm-8">
@@ -71,61 +91,32 @@ class Shop extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 col-sm-12 hidden-xs header-description">
-                <strong>Áo sơ mi nam</strong> luôn là trang phục lựa chọn hàng
-                đầu của nhiều chàng trai, bởi sự tiện ích và tính thời trang mà
-                nó mang lại cho người mặc.
-                <br /> Tại 4MEN, chúng tôi thường xuyên cập nhật những mẫu áo sơ
-                mi mới từ kiểu dáng trơn, sọc caro đến sơ mi phối họa tiết…,
-                nhằm giúp khách hàng lựa chọn được những sản phẩm đẹp, chất
-                lượng phù hợp với nhu cầu và sở thích của mình một cách dễ dàng
-                nhất.
-              </div>
+              {this.props.category && (
+                <div className="col-md-12 col-sm-12 hidden-xs header-description">
+                  <strong>{this.props.category.name}</strong>
+                  {this.props.category.description}
+                </div>
+              )}
               <div className="row">
                 <div className="col-sm-12">
-                  <br /> <span class="text-under">Lọc sản phẩm:</span>
-                  <ul className="cat-list">
-                    <li>
-                      <a
-                        href="https://4menshop.com/ao-so-mi-han-quoc.html"
-                        title="ao so mi han quoc"
-                      >
-                        Áo Sơ Mi Hàn Quốc
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://4menshop.com/ao-so-mi-hoa-tiet.html"
-                        title="ao so mi hoa tiet"
-                      >
-                        Áo Sơ Mi Họa Tiết
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://4menshop.com/ao-so-mi-caro.html"
-                        title="ao so mi caro"
-                      >
-                        Áo Sơ Mi Caro
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://4menshop.com/ao-so-mi-ngan-tay.html"
-                        title="ao so mi ngan tay"
-                      >
-                        Áo Sơ Mi Ngắn Tay
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://4menshop.com/ao-so-mi-jean-denim.html"
-                        title="ao so mi jean - denim"
-                      >
-                        Áo Sơ Mi Jean - Denim
-                      </a>
-                    </li>
-                  </ul>
+                  {this.props.category && this.props.category.subCategorys && (
+                    <>
+                      <br /> <span className="text-under">Lọc sản phẩm:</span>
+                      <ul className="cat-list">
+                        {this.props.category.subCategorys.map((item, index) => (
+                          <li key={index}>
+                            <Link
+                              className="text-dark"
+                              to={`/quan-ao?shop=${item.nameSeo}`}
+                              title="ao so mi han quoc"
+                            >
+                              {item.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -142,13 +133,12 @@ class Shop extends Component {
                 method="post"
               >
                 <label>
-                  Sản phẩm tại 4MEN
+                  Sản phẩm tại cửa hàng
                   <input
                     className="form-control"
                     type="text"
-                    name="text"
-                    placeholder="Từ khóa tìm kiếm"
-                    value=""
+                    name="sWord"
+                    placeholder="Updating"
                   />
                 </label>
                 <button type="submit" name="search" aria-label="Tìm">
@@ -160,14 +150,15 @@ class Shop extends Component {
               <h5>
                 <span>SẢN PHẨM BÁN CHẠY</span>
               </h5>
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
-              <ProductSmall />
+              {this.props.buyMoreProducts.map((item, index) => (
+                <Link
+                  key={index}
+                  className="text-dark"
+                  to={`/san-pham?sp=${item.nameSeo}`}
+                >
+                  <ProductSmall product={item} />
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -178,10 +169,14 @@ class Shop extends Component {
 Shop.defaultProps = {
   products: [],
   statusAction: -1,
+  category: "",
+  buyMoreProducts: [],
 };
 const mapStateToProps = (state) => ({
   statusAction: state.statusAction,
   products: state.products,
+  category: state.category,
+  buyMoreProducts: state.buyMoreProducts,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -189,6 +184,7 @@ const mapDispatchToProps = (dispatch) => ({
     {
       findProductsByCategoryNameSeo,
       findAllProductContainName,
+      findByProductByState,
     },
     dispatch
   ),

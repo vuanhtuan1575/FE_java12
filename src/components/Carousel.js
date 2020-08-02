@@ -11,21 +11,14 @@ class Carousel extends Component {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img
-              src="https://4menshop.com/images/thumbs/slides/banner-top-trang-chu-1-slide-19.png?t=1593158288"
+              src="/img/banner-top-trang-chu-1-slide-19.png"
               className="d-block w-100"
               alt="..."
             />
           </div>
           <div className="carousel-item">
             <img
-              src="https://4menshop.com/images/thumbs/slides/banner-top-trang-chu-1-slide-19.png?t=1593158288"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src="https://4menshop.com/images/thumbs/slides/banner-top-trang-chu-1-slide-19.png?t=1593158288"
+              src="/img/banner-top-trang-chu-2-slide-20.png"
               className="d-block w-100"
               alt="..."
             />

@@ -96,7 +96,7 @@ export default class Slick extends Component {
       <Slider {...settings}>
         {this.props.products &&
           this.props.products.map((item, index) => (
-            <div className="px-2">
+            <div className="px-2" style={{ minHeight: "300px" }}>
               <ProductItem product={item} key={index} />
             </div>
           ))}

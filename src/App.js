@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import AdminPage from "./pages/AdminPage";
 import AlertModel from "./components/AlertModel";
 import Payment from "./pages/Payment";
+import NoMatch from "./pages/NoMatch";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/admin" component={AdminPage}></Route>
           <Route exact path="/thanh-toan" component={Payment}></Route>
           <Route exact path="/test" component={AlertModel}></Route>
+          <Route component={NoMatch} />
         </Switch>
         <Footer />
       </Router>

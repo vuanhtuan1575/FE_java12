@@ -34,14 +34,14 @@ export const REMOVE_TO_CART = "REMOVE_TO_CART";
 export const IN_DE_CREASE = "IN_DE_CREASE";
 export const FIND_SIGNLE_CATEGORY = "FIND_SIGNLE_CATEGORY";
 export const FIND_ALL_PRODUCT_CONTAIN_NAME = "FIND_ALL_PRODUCT_CONTAIN_NAME";
+export const FIND_ALL_PRODUCT_AND_CATEGORY = "FIND_ALL_PRODUCT_AND_CATEGORY";
 
 export const FIND_SIGNLE_PRODUCT_BY_NAMESEO = "FIND_SIGNLE_PRODUCT_BY_NAMESEO";
 export const SWITCH_STATUS_CATEGORY = "SWITCH_STATUS_CATEGORY";
 
-export const findAllProductContainNameObj = (products, statusAction) => ({
-  statusAction: statusAction,
+export const findAllProductContainNameObj = (CateAndPro) => ({
   type: FIND_ALL_PRODUCT_CONTAIN_NAME,
-  products: products,
+  CateAndPro: CateAndPro,
 });
 export const loginProcess = (statusLogin) => ({
   type: LOGIN_PROCESS,
@@ -107,21 +107,23 @@ export const resetAction = (statusAction = -1) => ({
   type: RESET_ACTION,
   statusAction: statusAction,
 });
-export const findCategory = (listCategory, statusAction) => ({
+export const findCategory = (listCategory) => ({
   type: FIND_CATEGORY,
   listCategory: listCategory,
-  statusAction: statusAction,
 });
-export const findAllProduct = (listProduct, statusAction) => ({
+export const findAllProduct = (listProduct) => ({
   type: FIND_ALL_PRODUCT,
   listProduct: listProduct,
-  statusAction: statusAction,
 });
 
-export const findSignleProductByNameSeoObj = (product, statusAction) => ({
+export const findCateAndPro = (cateAndPro) => ({
+  type: FIND_ALL_PRODUCT_AND_CATEGORY,
+  cateAndPro: cateAndPro,
+});
+
+export const findSignleProductByNameSeoObj = (product) => ({
   type: FIND_SIGNLE_PRODUCT_BY_NAMESEO,
   product: product,
-  statusAction: statusAction,
 });
 export const findSignleCategoryObj = (category, statusAction) => ({
   type: FIND_SIGNLE_CATEGORY,
@@ -167,7 +169,7 @@ export const findAllCategoryFunc = () => {
     })
       .then(function (response) {
         if (response.status === 200) {
-          dipatch(findCategory(response.data, response.status));
+          dipatch(findCategory(response.data));
         }
       })
       .catch(function (error) {
@@ -183,6 +185,10 @@ export const resetActionFunc = () => {
   };
 };
 
+/**
+ * create Category
+ * @param {*} category
+ */
 export const createCategory = (category) => {
   const axios = require("axios");
   return (dipatch) => {
@@ -206,6 +212,10 @@ export const createCategory = (category) => {
       });
   };
 };
+/**
+ * update category
+ * @param {*} category
+ */
 export const updateCategory = (category) => {
   const axios = require("axios");
   return (dipatch) => {
@@ -230,6 +240,11 @@ export const updateCategory = (category) => {
   };
 };
 
+/**
+ * Login
+ * @param {*} username
+ * @param {*} password
+ */
 export const postLogin = (username, password) => {
   const axios = require("axios");
   return (dipatch) => {
@@ -332,7 +347,7 @@ export const findAllProductProcess = () => {
     })
       .then(function (response) {
         if (response.status === 200) {
-          dipatch(findAllProduct(response.data, response.status));
+          dipatch(findAllProduct(response.data));
         }
       })
       .catch(function (error) {
@@ -350,9 +365,7 @@ export const findSignleProductByNameSeo = (nameSeo) => {
     })
       .then(function (response) {
         if (response.status === 200) {
-          dipatch(
-            findSignleProductByNameSeoObj(response.data, response.status)
-          );
+          dipatch(findSignleProductByNameSeoObj(response.data));
         }
       })
       .catch(function (error) {
@@ -388,7 +401,7 @@ export const findProductsByCategoryNameSeo = (nameSeo) => {
     })
       .then(function (response) {
         if (response.status === 200) {
-          dipatch(findAllProduct(response.data, response.status));
+          dipatch(findCateAndPro(response.data));
         }
       })
       .catch(function (error) {
@@ -478,7 +491,7 @@ export const findAllProductContainName = (requestParam) => {
     })
       .then(function (response) {
         if (response.status === 200) {
-          dipatch(findAllProductContainNameObj(response.data, response.status));
+          dipatch(findAllProductContainNameObj(response.data));
         }
       })
       .catch(function (error) {

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link, withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./ProductDetail.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -55,6 +56,7 @@ class ProductDetail extends Component {
     active: "DESCRIPTION",
     screenWidth: null,
     indexImg: 0,
+    infinity: false,
   };
   componentDidMount() {
     const queryString = require("query-string");
@@ -103,36 +105,38 @@ class ProductDetail extends Component {
     this.notify(product);
   };
 
-  handleSubmit = (event) => {
-    alert("Your favorite flavor is: " + this.state.size);
-    event.preventDefault();
+  buyPackage = (product) => {
+    this.props.addToCartFunc(product, this.state.buyPackage);
+    this.props.history.push("/thanh-toan");
   };
 
   render() {
-    var settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-
-      initialSlide: 0,
-      nextArrow: <SampleNextArrow />,
-      prevArrow: <SamplePrevArrow />,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true,
-          },
-        },
-      ],
-    };
     const { product } = this.props;
-    console.log(this.state);
+    let settings;
+    if (product)
+      settings = {
+        dots: true,
+        infinite: product.jsonImg.length > 4,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+
+        initialSlide: 0,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              infinite: product.jsonImg.length > 3,
+              dots: true,
+            },
+          },
+        ],
+      };
+
     return (
       <div className="container">
         <div className="gird-container my-5">
@@ -145,10 +149,10 @@ class ProductDetail extends Component {
               />
             </div>
 
-            <Slider {...settings}>
-              {product &&
-                product.jsonImg.map((item, index) => (
-                  <div className="px-1">
+            {product && (
+              <Slider {...settings}>
+                {product.jsonImg.map((item, index) => (
+                  <div className="px-1" key={index}>
                     <img
                       src={item}
                       alt="Áo Sơ Mi Trắng ASM1266"
@@ -159,7 +163,8 @@ class ProductDetail extends Component {
                     />
                   </div>
                 ))}
-            </Slider>
+              </Slider>
+            )}
           </div>
           <div className="product-single">
             <div className="ps-header">
@@ -201,11 +206,13 @@ class ProductDetail extends Component {
                   <label
                     className="input-group-text"
                     htmlFor="inputGroupSelect01"
+                    style={{ padding: "6px 12px", height: "39px" }}
                   >
                     Size*
                   </label>
                 </div>
                 <select
+                  style={{ padding: "6px 12px", border: "0px solid" }}
                   className="custom-select"
                   id="inputGroupSelect01"
                   name="size"
@@ -222,6 +229,7 @@ class ProductDetail extends Component {
                   <label
                     className="input-group-text"
                     htmlFor="inputGroupSelect01"
+                    style={{ padding: "6px 12px", height: "39px" }}
                   >
                     Số Lượng*
                   </label>
@@ -229,6 +237,7 @@ class ProductDetail extends Component {
                 <select
                   className="custom-select"
                   id="inputGroupSelect01"
+                  style={{ padding: "6px 12px", border: "0px solid" }}
                   name="quanty"
                   value={this.state.quanty}
                   onChange={this.handleChange}
@@ -252,7 +261,7 @@ class ProductDetail extends Component {
               id="buyNow"
               rel="10790"
               className="addtobag mr-2"
-              onClick={this.handleSubmit}
+              onClick={() => this.buyPackage(product)}
               style={{ width: "150px" }}
             >
               <i className="fa fa-shopping-cart"></i> Mua hàng
@@ -303,7 +312,7 @@ class ProductDetail extends Component {
           <div className="">
             {this.state.active === "DESCRIPTION" ? (
               <div className="  ">
-                <p>{product && ReactHtmlParser(product.description)}</p>
+                {product && ReactHtmlParser(product.description)}
               </div>
             ) : (
               <div className="">
@@ -339,4 +348,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch
   ),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProductDetail)
+);
