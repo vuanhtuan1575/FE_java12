@@ -114,7 +114,15 @@ class ListProductAdmin extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.selectOptionCategory && this.state.selectOptionState) {
-      if (this.state.files) {
+      if (this.state.edit) {
+        if (this.state.files) {
+          this.handleUploadImage();
+
+          setTimeout(() => {
+            this.props.updateProduct(this.state.productDto);
+          }, 1000);
+        } else this.props.updateProduct(this.state.productDto);
+      } else if (this.state.files) {
         this.handleUploadImage();
 
         setTimeout(() => {

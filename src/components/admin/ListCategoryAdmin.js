@@ -49,6 +49,14 @@ class ListCategoryAdmin extends Component {
     this.setState({
       ...this.state,
       isCategoryParent: !this.state.isCategoryParent,
+      categoryDto: {
+        id: -1,
+        name: "",
+        nameSeo: "",
+        parentNameSeo: "",
+        isActive: undefined,
+        description: "",
+      },
     });
   };
 
@@ -286,7 +294,7 @@ class ListCategoryAdmin extends Component {
   };
   render() {
     const categorys = Array.from(this.props.categorys);
-
+    console.log(this.state);
     return (
       <>
         <this.modelAddCategory
