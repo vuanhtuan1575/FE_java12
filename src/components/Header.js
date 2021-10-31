@@ -15,7 +15,7 @@ import { numberToVnd } from "../common";
 
 class Header extends Component {
   componentDidMount() {
-    this.props.findAllCategoryFunc();
+    // this.props.findAllCategoryFunc();
   }
   render() {
     if (

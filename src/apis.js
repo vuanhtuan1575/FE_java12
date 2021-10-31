@@ -1,6 +1,6 @@
-export const BASE_URL = "http://webgiamgia.net:9090";
+export const BASE_URL = "http://localhost:8080/api";
 
-export const LOGIN_URL = `${BASE_URL}/api/auth/signin`;
+export const LOGIN_URL = `${BASE_URL}/auth/authenticate`;
 export const UPLOAD_MULTIPLE_URL = `${BASE_URL}/uploadMultipleFiles`;
 export const UPLOAD_SIGNLE_URL = `${BASE_URL}/uploadFile`;
 export const CREATE_CATEGORY_URL = `${BASE_URL}/admin/category/create`;

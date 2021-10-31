@@ -100,7 +100,7 @@ class Shop extends Component {
               <div className="row">
                 <div className="col-sm-12">
                   {this.props.category && this.props.category.subCategorys && (
-                    <>
+                    <div>
                       <br /> <span className="text-under">Lọc sản phẩm:</span>
                       <ul className="cat-list">
                         {this.props.category.subCategorys.map((item, index) => (
@@ -115,7 +115,7 @@ class Shop extends Component {
                           </li>
                         ))}
                       </ul>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>

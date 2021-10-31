@@ -76,7 +76,7 @@ class ProductItem extends Component {
     const { product } = this.props;
 
     return (
-      <>
+      <div>
         <this.modelAddProduct
           show={this.state.modelShow}
           onHide={() => this.handleShowModel()}
@@ -127,7 +127,7 @@ class ProductItem extends Component {
             </Link>
           </div>
         )}
-      </>
+      </div>
     );
   }
 }

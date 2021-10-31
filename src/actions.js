@@ -168,8 +168,8 @@ export const findAllCategoryFunc = () => {
       url: FIND_ALL_CATEGORY_URL,
     })
       .then(function (response) {
-        if (response.status === 200) {
-          dipatch(findCategory(response.data));
+        if (response.status === 200 && response.data.statusCode === 200) {
+          dipatch(findCategory(response.data.result));
         }
       })
       .catch(function (error) {
@@ -250,12 +250,12 @@ export const postLogin = (username, password) => {
   return (dipatch) => {
     axios
       .post(LOGIN_URL, {
-        usernameOrEmail: username,
+        username: username,
         password: password,
       })
       .then(function (response) {
         if (response.status === 200) {
-          let token = `${response.data.tokenType} ${response.data.accessToken}`;
+          let token = `${response.data.result} ${response.data.accessToken}`;
           setCookie("token", token, 1);
           dipatch(loginProcess(response.status));
         }
@@ -346,8 +346,8 @@ export const findAllProductProcess = () => {
       url: FIND_ALL_PRODUCT_URL,
     })
       .then(function (response) {
-        if (response.status === 200) {
-          dipatch(findAllProduct(response.data));
+        if (response.status === 200 && response.data.statusCode === 200) {
+          dipatch(findAllProduct(response.data.result));
         }
       })
       .catch(function (error) {

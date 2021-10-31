@@ -194,10 +194,10 @@ class ProductDetail extends Component {
               </Link>
             </p>
             {product && (
-              <>
+              <div>
                 <span>Điểm nổi bật:</span>
                 <div> {ReactHtmlParser(product.description)}</div>
-              </>
+              </div>
             )}
 
             <div className="gird-select">

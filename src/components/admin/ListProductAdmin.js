@@ -402,7 +402,9 @@ class ListProductAdmin extends Component {
 
     array.map((item, index) => {
       if (item.onMenu === false) {
-        temp = { value: item.nameSeo, label: item.name };
+        // temp = { value: item.nameSeo, label: item.name };
+        console.log(item);
+        temp = item;
         options.push(temp);
       }
       return console.log();
@@ -412,7 +414,7 @@ class ListProductAdmin extends Component {
 
   render() {
     return (
-      <>
+      <div>
         <this.modelAddProduct
           show={this.state.modelShow}
           onHide={() => this.handleShowModel()}
@@ -437,6 +439,7 @@ class ListProductAdmin extends Component {
                 </tr>
               </thead>
               <tbody>
+                {console.log(typeof products)}
                 {this.props.products &&
                   this.props.products.map((item, index) => (
                     <tr>
@@ -476,7 +479,7 @@ class ListProductAdmin extends Component {
             </table>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

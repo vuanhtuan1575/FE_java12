@@ -45,7 +45,7 @@ class Payment extends Component {
               <tbody>
                 {this.props.carts &&
                   this.props.carts.map((item, index) => (
-                    <>
+                    <div>
                       <tr key={index}>
                         <td>
                           <img
@@ -102,7 +102,7 @@ class Payment extends Component {
                           ></i>
                         </td>
                       </tr>
-                    </>
+                    </div>
                   ))}
               </tbody>
             </table>

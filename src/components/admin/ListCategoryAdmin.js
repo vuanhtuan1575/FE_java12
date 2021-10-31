@@ -296,7 +296,7 @@ class ListCategoryAdmin extends Component {
     const categorys = Array.from(this.props.categorys);
     console.log(this.state);
     return (
-      <>
+      <div>
         <this.modelAddCategory
           show={this.state.modelShow}
           onHide={() => this.handleShowModel()}
@@ -373,7 +373,7 @@ class ListCategoryAdmin extends Component {
             </table>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

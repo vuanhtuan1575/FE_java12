@@ -9,9 +9,7 @@ import { findAllProductProcess, findByProductByState } from "../actions";
 
 class Home extends Component {
   componentDidMount() {
-    this.props.findByProductByState(0); // san pham hot
-    this.props.findByProductByState(1); // san pham mua nhieu
-    this.props.findByProductByState(2); // san pham moi
+    this.props.findAllProductProcess();
   }
   render() {
     return (
@@ -27,7 +25,7 @@ class Home extends Component {
           </p>
         </div>
         <ListProduct products={this.props.hotProducts} />
-        <ShowCategory />
+        {/* <ShowCategory /> */}
         <div style={{ textAlign: "center" }} className="my-5">
           <h5>
             <strong>SẢN PHẨM MỚI NHẤT</strong>
